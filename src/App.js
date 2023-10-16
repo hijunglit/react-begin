@@ -1,13 +1,26 @@
-import Button from './Button';
-import styles from './App.module.css';
-
+import { useState, useEffect } from "react";
+function Hello() {
+  // useEffect(function () {
+  //   console.log("hi :)");
+  //   return function () {
+  //     console.log("bye :(");
+  //   };
+  // }, []);
+  useEffect(() => {
+    console.log("hi");
+    return () => console.log("bye:(");
+  }, []);
+  return <h1>H3llo</h1>;
+}
 function App() {
+  const [showing, setShowing] = useState(false);
+  const onClick = () => setShowing((prev) => !prev);
   return (
-    <div>
-      <h1 className={styles.title}>Hi! good morning again!</h1>
-      <Button text={"Continue"} /> 
-    </div>
-  );
+  <div>
+    { showing ? <Hello /> : null}
+    <button onClick={onClick}>{showing ? "Hide" : "show"}</button>
+  </div>
+  )
 }
 
 export default App;
