@@ -27,7 +27,7 @@ function App() {
         <button>Add To Do</button>
       </form>
       <ul>
-        {toDos.map((item, index) => <li key={index}>{item}</li>)}
+        {toDos.reverse().map((item, index) => <li key={index}>{item}</li>)}
       </ul>
     </div>
   );
