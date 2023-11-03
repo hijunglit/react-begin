@@ -12,7 +12,6 @@ function Home() {
       ).json();
       setMovies(json.data.movies);
       setLoading(false);
-      console.log(movies);
     }
     useEffect(() => {
       getMovies();
@@ -26,8 +25,9 @@ function Home() {
           ) : (
             <div>
               {movies.map((movie) => (
-                <Movie 
+                <Movie
                     key={movie.id}
+                    id={movie.id}
                     coverImg = {movie.medium_cover_image}
                     title={movie.title}
                     summary={movie.summary}
