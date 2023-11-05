@@ -3,13 +3,14 @@ import { useState, useEffect } from "react";
 function Crypto() {
   const [loading, setLoading] = useState(true);
   const [coins, setCoins] = useState([]);
-  const [assets, setAssets] = useState(null);
+  const [assets, setAssets] = useState(0);
+  const [selected, setSelected] = useState("");
   const onChange = (event) => {
-    const enterAssets = event.target.value;
-    setAssets(enterAssets);
+    setAssets(event.target.value);
   };
-  const onSubmit = (event) => {
-    event.preventDefault();
+  const selectCoin = (event) => {
+    setSelected(event.target.value);
+    const strData = event.target.value;
   };
   const getCoins = async () => {
     const json = await (
@@ -27,10 +28,10 @@ function Crypto() {
       {loading ? (
         <strong>Loading...</strong>
       ) : (
-        <select>
+        <select onChange={selectCoin}>
           {coins.map((coin) => (
             <option key={coin.id}>
-              {coin.name}({coin.symbol}) : ${coin.quotes.USD.price} USD
+              {coin.name}({coin.symbol}) : $ {coin.quotes.USD.price} USD
             </option>
           ))}
         </select>
@@ -38,18 +39,26 @@ function Crypto() {
       {loading ? (
         ""
       ) : (
-        <form onSubmit={onSubmit}>
-          <label>
-            Assets:
-            <input
-              onChange={onChange}
-              type="number"
-              placeholder="Enter your assets"
-              required
-            />
-          </label>
-          <input type="submit" placeholder="Submit" />
-        </form>
+        <label htmlFor="assets">
+          Assets:
+          <input
+            id="assets"
+            value={assets}
+            onChange={onChange}
+            type="number"
+            required
+          />
+        </label>
+      )}
+      {assets ? (
+        <div>
+          <h1>You have a {assets}$.</h1>
+          <h3>
+            {selected ? `You selected ${selected}.` : `You're not selected yet`}{" "}
+          </h3>
+        </div>
+      ) : (
+        <h1>Please enter your own assets</h1>
       )}
     </div>
   );
