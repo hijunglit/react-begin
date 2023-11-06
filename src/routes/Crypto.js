@@ -1,67 +1,57 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 function Crypto() {
-  const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
-  const [assets, setAssets] = useState(0);
-  const [selected, setSelected] = useState("");
-  const onChange = (event) => {
-    setAssets(event.target.value);
-  };
-  const selectCoin = (event) => {
-    setSelected(event.target.value);
-    const strData = event.target.value;
-  };
-  const getCoins = async () => {
-    const json = await (
-      await fetch("https://api.coinpaprika.com/v1/tickers")
-    ).json();
-    setCoins(json);
-    setLoading(false);
-  };
-  useEffect(() => {
-    getCoins();
-  }, []);
-  return (
-    <div>
-      <h1>The Coins! {loading ? null : `(${coins.length})`}</h1>
-      {loading ? (
-        <strong>Loading...</strong>
-      ) : (
-        <select onChange={selectCoin}>
-          {coins.map((coin) => (
-            <option key={coin.id}>
-              {coin.name}({coin.symbol}) : $ {coin.quotes.USD.price} USD
-            </option>
-          ))}
-        </select>
-      )}
-      {loading ? (
-        ""
-      ) : (
-        <label htmlFor="assets">
-          Assets:
-          <input
-            id="assets"
-            value={assets}
-            onChange={onChange}
-            type="number"
-            required
-          />
-        </label>
-      )}
-      {assets ? (
+    const [loading, setLoading] = useState(true);
+    const [coins, setCoins] = useState([]);
+    const [amount, setAmount] =useState(0);
+    async function getCoins() {
+        const response = await fetch("https://api.coinpaprika.com/v1/tickers");
+        const json = await response.json();
+        console.log(json);
+        setLoading(false);
+        setCoins(json);
+    }
+    useEffect(() => {
+        getCoins();
+    }, [])
+    const onChange = (event) => {
+        setAmount(event.target.value);
+
+    }
+    return (
         <div>
-          <h1>You have a {assets}$.</h1>
-          <h3>
-            {selected ? `You selected ${selected}.` : `You're not selected yet`}{" "}
-          </h3>
+            <h1>The Coins! {loading ? "" : `(${coins.length})`}</h1>
+            {loading ? <strong>Loading...</strong> : (
+                <select>
+                    {coins.map((coin) => (
+                        <option key={coin.id}>
+                            {coin.name} ({coin.symbol}) : ${coin.quotes.USD.price} USD
+                        </option>
+                    ))
+                }
+                </select>
+            )}
+            {loading ? "..." : (
+                <div>
+                    <form>
+                        <label>
+                            Please enter the exchange amount:
+                            <input 
+                                type='number'
+                                value={amount}
+                                onChange={onChange}
+                            />
+                        </label>
+                    </form>
+                    <strong>You entered exchange amount of ${amount}USD </strong>
+                    <p>
+                        you can get{coins[0].name} {coins[0].symbol}: {amount / coins[0].quotes.USD.price} bitcoins!
+                    </p>
+                </div>
+            )}
+
         </div>
-      ) : (
-        <h1>Please enter your own assets</h1>
-      )}
-    </div>
-  );
+    );
 }
 
 export default Crypto;
