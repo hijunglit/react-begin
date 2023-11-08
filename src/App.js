@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom/cjs/react-router-dom.min";
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="react-begin">
       <Switch>
         <Route path="/about-us">
           <h1>Hello</h1>
